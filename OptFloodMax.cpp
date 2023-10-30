@@ -82,10 +82,10 @@ int main(int argc, char **argv)
 
     // Gather all the message counts at rank 0
     int totalMessages = 0;
-    MPI_Reduce(&messageCount, &totalMessages, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&messageCount, &totalMessages, 1, MPI_INT, MPI_SUM, max_uid, MPI_COMM_WORLD);
 
     // Rank 0 prints the total count
-    if (rank == 0)
+    if (rank == max_uid)
     {
         std::cout << totalMessages << " messages sent in total" << std::endl;
     }
