@@ -21,8 +21,11 @@ int main(int argc, char **argv)
     int rounds = 0;
     int status = 0; // 0: unknown, 1: leader, 2: non-leader
 
+    int messageCount = 0;
+
     while (rounds < diam)
     {
+        messageCount++;
         // Send max_uid to all other processes.
         for (int i = 0; i < size; i++)
         {
@@ -58,6 +61,16 @@ int main(int argc, char **argv)
         oss << "Process " << rank << " is a non-leader." << std::endl;
     }
     std::cout << oss.str();
+
+    // Gather all the message counts at rank 0
+    int totalMessages = 0;
+    MPI_Reduce(&messageCount, &totalMessages, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    // Rank 0 prints the total count
+    if (rank == 0)
+    {
+        std::cout << totalMessages << " messages sent in total" << std::endl;
+    }
 
     MPI_Finalize();
     return 0;
