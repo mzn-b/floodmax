@@ -25,13 +25,13 @@ int main(int argc, char **argv)
 
     while (rounds < diam)
     {
-        messageCount++;
         // Send max_uid to all other processes.
         for (int i = 0; i < size; i++)
         {
             if (i != rank)
             {
                 MPI_Send(&max_uid, 1, MPI_INT, i, UID_TAG, MPI_COMM_WORLD);
+                messageCount++;
             }
         }
 

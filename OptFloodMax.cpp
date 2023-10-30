@@ -22,7 +22,6 @@ int main(int argc, char **argv)
 
     while (rounds < diam)
     {
-        messageCount++;
         std::cout << "Process " << rank << " entering round " << rounds << std::endl;
         // std::cout << "Sending from " << rank << " in round " << rounds << std::endl;
         // Sending phase>
@@ -33,6 +32,7 @@ int main(int argc, char **argv)
                 if (i != rank)
                 {
                     MPI_Send(&max_uid, 1, MPI_INT, i, rounds, MPI_COMM_WORLD);
+                    messageCount++;
                 }
             }
         }
