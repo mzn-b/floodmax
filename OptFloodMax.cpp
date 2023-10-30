@@ -6,6 +6,8 @@
 
 int main(int argc, char** argv) {
     int world_size, rank;
+    int sent_messages_local = 0;
+    int sent_messages_global = 0;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
@@ -23,8 +25,9 @@ int main(int argc, char** argv) {
         // Sending phase>
         if (new_info) {
             for (int i = 0; i < world_size; i++) {
-                if (i != rank) {
+                if (i != rank && i != max_uid) {
                     MPI_Send(&max_uid, 1, MPI_INT, i, rounds, MPI_COMM_WORLD);
+                    sent_messages_local += 1;
                 }
             }
         }
@@ -63,6 +66,11 @@ int main(int argc, char** argv) {
         std::cout << "Process " << rank << " is the leader!" << std::endl;
     } else {
         std::cout << "Process " << rank << " is not the leader." << std::endl;
+    }
+
+    MPI_Reduce(&sent_messages_local, &sent_messages_global, 1, MPI_INT, MPI_SUM, max_uid, MPI_COMM_WORLD);
+    if (max_uid == rank) {
+        std::cout << "Sent " << sent_messages_global << " messages in total" << std::endl;
     }
 
     MPI_Finalize();

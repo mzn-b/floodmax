@@ -8,6 +8,8 @@ const int UID_TAG = 1;
 int main(int argc, char **argv)
 {
     int rank, size;
+    int sent_messages_local = 0;
+    int sent_messages_global = 0;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -29,6 +31,7 @@ int main(int argc, char **argv)
             if (i != rank)
             {
                 MPI_Send(&max_uid, 1, MPI_INT, i, UID_TAG, MPI_COMM_WORLD);
+                sent_messages_local += size-1;
             }
         }
 
@@ -58,6 +61,11 @@ int main(int argc, char **argv)
         oss << "Process " << rank << " is a non-leader." << std::endl;
     }
     std::cout << oss.str();
+
+    MPI_Reduce(&sent_messages_local, &sent_messages_global, 1, MPI_INT, MPI_SUM, max_uid, MPI_COMM_WORLD);
+    if (status == 1) {
+        std::cout << "Sent " << sent_messages_global << " messages in total" << std::endl;
+    }
 
     MPI_Finalize();
     return 0;
