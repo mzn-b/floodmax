@@ -1,6 +1,7 @@
 #include <mpi.h>
 #include <unistd.h>
 #include <algorithm>
+#include <iostream>
 #include "LeaderElectionAlgorithm.h"
 
 class OptFloodMax : public LeaderElectionAlgorithm {

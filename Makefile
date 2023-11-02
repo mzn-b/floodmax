@@ -1,14 +1,17 @@
 # Compiler settings
-MPICXX = mpic++
-CXXFLAGS = -Wall -std=c++11
+MPICXX = mpicxx.mpich
+CXXFLAGS = -Wall 
 
 # Targets
-all: FloodMax OptFloodMax
+all: FloodMax OptFloodMax HelloWorld
 
-FloodMax: FloodMax.cpp LeaderElectionAlgorithm.cpp
+FloodmakeMax: FloodMax.cpp LeaderElectionAlgorithm.cpp
 	$(MPICXX) $(CXXFLAGS) $^ -o $@
 
 OptFloodMax: OptFloodMax.cpp LeaderElectionAlgorithm.cpp
+	$(MPICXX) $(CXXFLAGS) $^ -o $@
+	
+HelloWorld: HelloWorld.cpp
 	$(MPICXX) $(CXXFLAGS) $^ -o $@
 
 clean:
