@@ -1,4 +1,5 @@
 #pragma once
+#include <mpi.h>
 
 class LeaderElectionAlgorithm {
 public:
@@ -6,9 +7,11 @@ public:
     ~LeaderElectionAlgorithm();
     int getRank();
     int getSize();
+    MPI_Comm getCommunicator();
     int electLeader();
 private:
-    int rank, size;
+    MPI_Comm communicator;
+    int rank, size, diameter;
     virtual void initFloodMax() = 0;
     virtual int sendCurrentMax(int max_uid, int round) = 0;
     virtual void receiveMax(int* max_uid, int round) = 0;

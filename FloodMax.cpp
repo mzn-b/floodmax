@@ -18,7 +18,7 @@ private:
         {
             if (i != getRank())
             {
-                MPI_Send(&max_uid, 1, MPI_INT, i, round, MPI_COMM_WORLD);
+                MPI_Send(&max_uid, 1, MPI_INT, i, round, getCommunicator());
                 messages++;
             }
         }
@@ -29,7 +29,7 @@ private:
         for (int i = 0; i < getSize() - 1; i++)
         {
             int received_max;
-            MPI_Recv(&received_max, 1, MPI_INT, MPI_ANY_SOURCE, round, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(&received_max, 1, MPI_INT, MPI_ANY_SOURCE, round, getCommunicator(), MPI_STATUS_IGNORE);
             if (received_max > *max_uid) *max_uid = received_max;
         }
     }

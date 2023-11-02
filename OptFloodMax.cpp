@@ -1,6 +1,7 @@
 #include <mpi.h>
 #include <unistd.h>
 #include <algorithm>
+#include <iostream>
 #include "LeaderElectionAlgorithm.h"
 
 class OptFloodMax : public LeaderElectionAlgorithm {
@@ -23,7 +24,7 @@ private:
         {
             if (i != getRank())
             {
-                MPI_Send(&max_uid, 1, MPI_INT, i, round, MPI_COMM_WORLD);
+                MPI_Send(&max_uid, 1, MPI_INT, i, round, getCommunicator());
                 messages++;
             }
         }
@@ -40,7 +41,7 @@ private:
         for (int i = 0; i < world_size - 1; i++)
         { // We expect to receive world_size-1 messages (everyone except ourselves)
             recv_uids[i] = -1;
-            MPI_Irecv(&recv_uids[i], 1, MPI_INT, MPI_ANY_SOURCE, round, MPI_COMM_WORLD, &r[i]);
+            MPI_Irecv(&recv_uids[i], 1, MPI_INT, MPI_ANY_SOURCE, round, getCommunicator(), &r[i]);
         }
 
         // wait for 1 second to receive messages for this round
@@ -61,7 +62,7 @@ private:
         } else {
             new_info = false;
         }
-        std::cout << "Process " << getRank() << " received " << *max_uid << " in round " << round << std::endl;
+        //std::cout << "Process " << getRank() << " received " << *max_uid << " in round " << round << std::endl;
     }
 
 };
