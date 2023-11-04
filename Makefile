@@ -5,7 +5,7 @@ CXXFLAGS = -Wall
 # Targets
 all: FloodMax OptFloodMax
 
-FloodmakeMax: FloodMax.cpp LeaderElectionAlgorithm.cpp
+FloodMax: FloodMax.cpp LeaderElectionAlgorithm.cpp
 	$(MPICXX) $(CXXFLAGS) $^ -o $@
 
 OptFloodMax: OptFloodMax.cpp LeaderElectionAlgorithm.cpp
